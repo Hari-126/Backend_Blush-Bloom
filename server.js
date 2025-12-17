@@ -26,9 +26,13 @@ mongoose
 // Routes
 const userRouter = require("./Router/userRouter");
 const productRouter = require("./Router/productRouter");
+const contactRouter = require("./Router/contactRouter");
+const adminRouter = require("./Router/adminRouter");
 
 app.use("/api/users", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/contact", contactRouter);
+app.use("/api/admin", adminRouter);
 
 // Root Route
 app.get("/", (req, res) => {

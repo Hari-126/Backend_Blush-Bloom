@@ -92,6 +92,23 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid Password" });
     }
 
+    // Update last login and login history
+    const loginEntry = {
+      loginTime: new Date(),
+      ipAddress: req.ip || req.connection.remoteAddress || "unknown",
+      userAgent: req.headers["user-agent"] || "unknown",
+    };
+
+    user.lastLogin = new Date();
+    user.loginHistory.push(loginEntry);
+    
+    // Keep only last 10 login records
+    if (user.loginHistory.length > 10) {
+      user.loginHistory = user.loginHistory.slice(-10);
+    }
+    
+    await user.save();
+
     // Generate JWT Token
     const token = jwt.sign(
       {
@@ -111,6 +128,8 @@ const loginUser = async (req, res) => {
         firstname: user.firstname,
         email: user.email,
         role: user.role,
+        lastLogin: user.lastLogin,
+        loginHistory: user.loginHistory.slice(-5),
       },
     });
   } catch (error) {

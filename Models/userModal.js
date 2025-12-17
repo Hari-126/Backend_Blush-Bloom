@@ -37,6 +37,26 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+    loginHistory: [
+      {
+        loginTime: {
+          type: Date,
+          default: Date.now,
+        },
+        ipAddress: {
+          type: String,
+          default: "unknown",
+        },
+        userAgent: {
+          type: String,
+          default: "unknown",
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
